@@ -3,21 +3,36 @@
 import { useEffect, useState } from "react";
 
 const messages = [
-    "You make my heart do stupid things 💜",
-    "I smile like an idiot when I think about you 😌",
-    "You're my favorite notification 📱",
-    "I didn't plan this, but here we are ❤️",
-    "You're the reason I check my phone too much 😏",
-    "Being with you feels like coming home 🏠",
-    "You make everything better just by existing 🌸",
-    "I'd choose you in every universe 🌌",
-    "My heart skips beats and it's your fault 💗",
-    "You're the plot twist I never saw coming 🦋",
-    "I miss you even when you're right here 🫶",
-    "You're my 11:11 wish every single time ✨",
-    "I never get tired of your face 😍",
-    "You had me at hello… and every word after 💬",
-    "I'd swipe right on you a thousand times 💜",
+    "Different time zones, same heartbeat… somehow we just work 💜",
+    "While you're starting your day, I’m thinking about you ending mine 😌",
+    "You're miles away but somehow the closest person to my heart 📱",
+    "I didn’t plan to fall for someone so far away… but I’d do it again ❤️",
+    "No matter the distance, you’re still my favorite place 😏",
+    "Being with you, even through a screen, feels like home 🏠",
+    "You make the distance feel smaller just by being you 🌸",
+    "I'd cross every mile between Kenya and Canada just to hold you 🌌",
+    "My heart doesn’t care about distance… it just chose you 💗",
+    "You’re the best thing that ever came from a different time zone 🦋",
+    "I miss you in ways I can’t even explain 🫶",
+    "You're my wish… even across continents ✨",
+    "Even through a screen, you still take my breath away 😍",
+    "You didn’t just enter my life… you crossed oceans to change it 💬",
+    "I'd still swipe right on you… even from another continent 💜",
+    "You make the late nights and early mornings worth it 💖",
+    "No distance could ever make me feel less for you 😌",
+    "You're the reason I check my phone at the weirdest hours 😅",
+    "You feel close even when you're thousands of miles away 💫",
+    "Even silence with you on call feels perfect 🫶",
+    "You’re not just far away… you’re deeply mine 💕",
+    "Every message from you feels like a little piece of home 🌹",
+    "You make love feel real, even from across the world ❤️",
+    "You're the reason distance doesn’t scare me anymore 🎶",
+    "I didn’t expect to find something this real so far away 💭",
+    "You’ve got my heart traveling across time zones daily 💜",
+    "If love had a location, mine would be wherever you are 📖",
+    "You’re my peace… even from miles away 🌊",
+    "No matter the distance, I’m always yours 💗",
+    "One day, all this distance will just be a story we tell 💫",
 ];
 
 // floating hearts
@@ -43,11 +58,43 @@ const Hearts = () => {
 };
 
 const Love = () => {
-    const [message, setMessage] = useState("");
     const [displayText, setDisplayText] = useState("");
     const [visible, setVisible] = useState(false);
     const [typing, setTyping] = useState(false);
     const [pressed, setPressed] = useState(false);
+
+    const [clickCount, setClickCount] = useState(0);
+    const [disabled, setDisabled] = useState(false);
+
+    // get today's date key
+    const getTodayKey = () => {
+        const today = new Date();
+        return today.toDateString(); // e.g. "Tue Apr 14 2026"
+    };
+
+    // load stored data
+    useEffect(() => {
+        const storedDate = localStorage.getItem("love_date");
+        const storedCount = localStorage.getItem("love_count");
+
+        const today = getTodayKey();
+
+        if (storedDate === today) {
+            const count = Number(storedCount) || 0;
+            setClickCount(count);
+            if (count >= 2) setDisabled(true);
+        } else {
+            // reset for new day
+            localStorage.setItem("love_date", today);
+            localStorage.setItem("love_count", "0");
+            setClickCount(0);
+            setDisabled(false);
+        }
+    }, []);
+
+    const updateStorage = (count: number) => {
+        localStorage.setItem("love_count", count.toString());
+    };
 
     const typeMessage = (text: string) => {
         setDisplayText("");
@@ -67,17 +114,31 @@ const Love = () => {
     };
 
     const showMessage = () => {
+        if (disabled) return;
+
         const randomMsg =
             messages[Math.floor(Math.random() * messages.length)];
 
         setPressed(true);
-        setMessage(randomMsg);
 
         setTimeout(() => {
             typeMessage(randomMsg);
         }, 150);
 
         setTimeout(() => setPressed(false), 300);
+
+        const newCount = clickCount + 1;
+        setClickCount(newCount);
+        updateStorage(newCount);
+
+        if (newCount >= 2) {
+            setTimeout(() => {
+                setDisabled(true);
+                typeMessage(
+                    "Okay… that’s enough love for today 😌💜\nCome back tomorrow, I miss you already."
+                );
+            }, 1200);
+        }
     };
 
     return (
@@ -100,7 +161,7 @@ const Love = () => {
                 <div className="mb-6 flex justify-center animate-fade-in-up">
                     <div className="relative w-28 h-28 rounded-full overflow-hidden ring-2 ring-primary/60 glow-lilac animate-float">
                         <img
-                            src="/josh.jpg"
+                            src="/me.jpeg"
                             alt="Me"
                             className="w-full h-full object-cover"
                         />
@@ -118,18 +179,20 @@ const Love = () => {
                 {/* button */}
                 <button
                     onClick={showMessage}
+                    disabled={disabled}
                     className={`px-10 py-5 text-xl font-semibold rounded-2xl transition-all duration-300 mb-10
                         bg-primary text-primary-foreground glow-lilac
                         hover:scale-105 active:scale-95
-                        ${pressed ? "opacity-70 scale-95" : ""}`}
+                        ${pressed ? "opacity-70 scale-95" : ""}
+                        ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
                 >
-                    Give me love 💜
+                    {disabled ? "Come back tomorrow my Queen 💜" : "Give me love 💜"}
                 </button>
 
                 {/* message box */}
                 {visible && (
                     <div className="mt-4 p-6 rounded-2xl bg-secondary/50 backdrop-blur-md border border-border transition-all duration-300">
-                        <p className="text-xl text-lilac-soft font-medium min-h-[60px]">
+                        <p className="text-xl text-lilac-soft font-medium min-h-[60px] whitespace-pre-line">
                             {displayText}
                             <span className="animate-pulse">|</span>
                         </p>

@@ -126,12 +126,31 @@ const FinalProposal = ({ onAccept }: FinalProposalProps) => {
 
                 {/* 💖 Image */}
                 <div className="mb-8 flex justify-center">
-                    <div className="relative rounded-2xl overflow-hidden glow-lilac w-52 h-52 shadow-2xl">
+                    <div className="relative w-52 h-52">
+
+                        {/* Top Right Flower */}
                         <img
-                            src="/emma.jpeg"
-                            alt="For you"
-                            className="w-full h-full object-cover"
+                            src="/lilac.png"
+                            alt="flower"
+                            className="absolute -top-6 -right-6 w-16 h-16 -rotate-30 z-20 opacity-70 pointer-events-none animate-pulse"
                         />
+
+                        {/* Bottom Left Flower */}
+                        <img
+                            src="/lilac.png"
+                            alt="flower"
+                            className="absolute -bottom-6 -left-6 w-16 h-16 -rotate-12 z-20 opacity-70 pointer-events-none animate-pulse"
+                        />
+
+                        {/* Main Image */}
+                        <div className="relative rounded-2xl overflow-hidden glow-lilac w-52 h-52 shadow-2xl">
+                            <img
+                                src="/emma.jpeg"
+                                alt="For you"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+
                     </div>
                 </div>
 
