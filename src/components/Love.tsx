@@ -132,12 +132,18 @@ const Love = () => {
         updateStorage(newCount);
 
         if (newCount >= 2) {
+            // estimate typing duration based on message length
+            const typingDuration = randomMsg.length * 35;
+
             setTimeout(() => {
-                setDisabled(true);
-                typeMessage(
-                    "Okay… that’s enough love for today 😌💜\nCome back tomorrow, I miss you already."
-                );
-            }, 1200);
+                // small romantic pause after message finishes
+                setTimeout(() => {
+                    setDisabled(true);
+                    typeMessage(
+                        "Okay… that’s enough love for today 😌💜\nCome back tomorrow, I miss you already."
+                    );
+                }, 2200); // pause after typing finishes
+            }, typingDuration);
         }
     };
 
